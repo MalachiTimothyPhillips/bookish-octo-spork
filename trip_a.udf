@@ -33,6 +33,7 @@ static occa::memory o_locToGlobE;
 static occa::memory o_hi;
 static occa::memory o_him1;
 static occa::memory o_phis;
+static occa::memory o_gllz;
 
 /*
 void qtl(nrs_t* nrs, dfloat time, occa::memory o_div)
@@ -129,7 +130,7 @@ void userf(nrs_t *nrs, dfloat time, occa::memory o_U, occa::memory o_FU)
     std::cout << "kmax:" << kmax << std::endl;
     computeHIKernel(NUMBER_ELEMENTS_Z,
                     kmax,
-                    mesh->o_gllzw,
+                    o_gllz,
                     o_phis,
                     o_hi);
   }
@@ -152,6 +153,9 @@ void userf(nrs_t *nrs, dfloat time, occa::memory o_U, occa::memory o_FU)
 void UDF_Setup(nrs_t *nrs)
 {
   auto mesh = nrs->meshV;
+
+  // work around for https://github.com/Nek5000/nekRS/issues/446
+  o_gllz = platform->device.malloc(mesh->Nq * sizeof(dfloat), mesh->gllz);
 
   xmax = platform->linAlg->max(mesh->Nlocal, mesh->o_x, platform->comm.mpiComm);
   xmin = platform->linAlg->min(mesh->Nlocal, mesh->o_x, platform->comm.mpiComm);
