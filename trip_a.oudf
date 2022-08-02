@@ -111,7 +111,7 @@ dfloat phi_rand(dfloat phi, int k)
     const dfloat b1 = 1.0f - b;
 
     const dlong e = n / p_Np;
-    const dlong ez = 1 + locToGlobE[e]/(nelx*nely);
+    const dlong ez = locToGlobE[e]/(nelx*nely);
 
     const dlong k = (n-e*p_Np) / (p_Nq * p_Nq);
     const dlong id = ez * p_Nq + k;
